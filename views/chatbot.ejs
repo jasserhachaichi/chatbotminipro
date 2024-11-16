@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+  <meta name="description" content="" />
+  <meta name="author" content="" />
+  <title>Simple Sidebar - Start Bootstrap Template</title>
+  <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.9.0/css/all.min.css'>
+  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+  <!-- Favicon-->
+  <link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
+  <!-- Core theme CSS (includes Bootstrap)-->
+  <link href="css/styles.css" rel="stylesheet" />
+  <style>
+    #answers p {
+      border: 2px solid black;
+      padding: 15px;
+      margin: 10px 0;
+      border-radius: 25px;
+    }
+
+    #search-form {
+      width: 50%;
+      margin: 0 auto;
+      position: relative;
+    }
+
+    #search-form input {
+      width: 100%;
+      font-size: 1.5rem;
+      padding: 10px 15px;
+      border: 2px solid #ccc;
+      border-radius: 2px;
+    }
+
+    #search-form .btnaction {
+      position: absolute;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      display: flex;
+      justify-content: center;
+    }
+
+    #search-form .btnaction button {
+      background-color: transparent;
+      outline: none;
+      border: none;
+      width: 3rem;
+      text-align: center;
+      font-size: 1.75rem;
+      cursor: pointer;
+      color: #333;
+    }
+
+    .info {
+      margin-top: 0.5rem;
+      text-align: center;
+      font-size: 0.75rem;
+    }
+
+    @media (max-width: 1200px) {
+      #search-form {
+        width: 70%;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="d-flex" id="wrapper">
+    <!-- Sidebar-->
+    <div class="border-end bg-white" id="sidebar-wrapper">
+      <div class="sidebar-heading border-bottom bg-light">Vega ai</div>
+      <div class="list-group list-group-flush">
+        <a class="list-group-item list-group-item-action list-group-item-light p-3" href="/chatbot">New Conversation</a>
+
+
+        <% conversations.forEach(conversation => { %>
+        <a class="list-group-item list-group-item-action list-group-item-light p-3" href="/chatbot?idconv=<%= conversation.conversationId %>"><%= conversation.firstUserMessagePreview + "..." %></a>
+        <% }) %>
+
+
+
+
+
+        <a class="list-group-item list-group-item-action list-group-item-light p-3" href="/auth/logout">Log Out</a>
+      </div>
+    </div>
+    <!-- Page content wrapper-->
+    <div id="page-content-wrapper">
+      <!-- Top navigation-->
+      <nav class="navbar navbar-expand-lg navbar-light bg-light border-bottom">
+        <div class="container-fluid">
+          <button class="btn btn-primary" id="sidebarToggle">Toggle Menu</button>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
+          <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav ms-auto mt-2 mt-lg-0">
+              <li><%= name %></li>
+            </ul>
+
+
+            <ul class="navbar-nav ms-auto mt-2 mt-lg-0">
+              <li class="nav-item active"><a class="nav-link" href="#!">Home</a></li>
+              <li class="nav-item"><a class="nav-link" href="#!">Link</a></li>
+              <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Dropdown</a>
+                <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                  <a class="dropdown-item" href="#!">Action</a>
+                  <a class="dropdown-item" href="#!">Another action</a>
+                  <div class="dropdown-divider"></div>
+                  <a class="dropdown-item" href="#!">Something else here</a>
+                </div>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </nav>
+      <!-- Page content-->
+      <div class="d-flex flex-column  justify-content-end align-items-center" style="height: calc(100% - 100px);">
+        <div id="answers" class="container">
+          <% messages.forEach(message => { %>
+          <p>
+            <%= (message.sender === name) ? "You: " : message.sender+": " %><%= message.content %>
+          </p>
+          <% }) %>
+        </div>
+        <div class="container">
+          <form action="/" method="get" target="_blank" id="search-form">
+            <input id="answer-input" name="answerinput" type="text" placeholder="Ask me..." autocomplete="off" autofocus>
+            <!-- <button type="button"><i class="fas fa-microphone"></i></button> -->
+          </form>
+          <p class="info"></p>
+        </div>
+
+
+
+
+
+      </div>
+    </div>
+  </div>
+  <!-- Bootstrap core JS-->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+  <!-- Core theme JS-->
+  <script src="js/scripts.js"></script>
+  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+  <script>
+    AOS.init();
+  </script>
+
+  <script>
+    const searchForm = document.querySelector("#search-form");
+    const searchFormInput = searchForm.querySelector("input"); // <=> document.querySelector("#search-form input");
+    const info = document.querySelector(".info");
+
+
+
+
+    function createPelm(msg, creator, delay) {
+      const answersDiv = document.getElementById("answers");
+      const newAnswerElement = document.createElement("p");
+      newAnswerElement.setAttribute("data-aos", "fade-up");
+      newAnswerElement.setAttribute("data-aos-duration", delay);
+
+
+      if (creator == "bot") {
+        newAnswerElement.textContent = "Vega" + ": " + msg;
+      } else {
+        newAnswerElement.textContent = creator + ": " + msg;
+      }
+
+      answersDiv.appendChild(newAnswerElement);
+    }
+
+
+
+    // The speech recognition interface lives on the browser’s window object
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition; // if none exists -> undefined
+
+    if (SpeechRecognition) {
+      console.log("Your Browser supports speech Recognition");
+
+      const recognition = new SpeechRecognition();
+      recognition.continuous = true;
+      // recognition.lang = "en-US";
+      searchForm.insertAdjacentHTML("beforeend", '<div class="btnaction"> <button type="button"><i class="fas fa-microphone"></i></button> <button id="send-btn" type="button"><i class="fas fa-paper-plane"></i></button> </div>');
+      searchFormInput.style.paddingRight = "50px";
+
+
+      const micIcon = searchForm.querySelector(".btnaction .fa-microphone");
+      const micBtn = micIcon.parentNode;
+
+
+      const answerInput = document.getElementById("answer-input");
+      const sendBtn = document.getElementById("send-btn");
+
+      sendBtn.addEventListener("click", sendBtnClick);
+
+      function sendBtnClick() {
+
+        const inputValue = answerInput.value.trim();
+        if (inputValue !== "") {
+          createPelm(answerInput.value, "You", 500);
+          answerInput.value = '';
+          // AJAX request
+          const xhr = new XMLHttpRequest();
+          xhr.open("GET", `/Hercai/<%= (idconv == undefined) ? "undefined" : idconv %>/${inputValue}`, true);
+
+          
+
+
+
+          xhr.setRequestHeader("Content-Type", "application/json");
+
+          xhr.onload = function() {
+            if (xhr.status === 200) {
+              const response = JSON.parse(xhr.responseText);
+              //console.log("Reply:", response.reply);
+              createPelm(response.reply, "bot", 600);
+
+            } else {
+              console.error("Error:", xhr.statusText);
+            }
+          };
+
+          xhr.onerror = function() {
+            console.error("Request failed");
+          };
+
+          xhr.send();
+        } else {
+          console.error("Input value is empty");
+        }
+      }
+
+
+
+
+      micBtn.addEventListener("click", micBtnClick);
+
+      function micBtnClick() {
+        if (micIcon.classList.contains("fa-microphone")) { // Start Voice Recognition
+          recognition.start(); // First time you have to allow access to mic!
+        } else {
+          recognition.stop();
+        }
+      }
+      recognition.addEventListener("start", startSpeechRecognition);
+
+      function startSpeechRecognition() {
+        micIcon.classList.remove("fa-microphone");
+        micIcon.classList.add("fa-microphone-slash");
+        searchFormInput.focus();
+        console.log("Voice activated, SPEAK");
+      }
+      recognition.addEventListener("end", endSpeechRecognition);
+
+      function endSpeechRecognition() {
+        micIcon.classList.remove("fa-microphone-slash");
+        micIcon.classList.add("fa-microphone");
+        searchFormInput.focus();
+        console.log("Speech recognition service disconnected");
+      }
+      recognition.addEventListener("result", resultOfSpeechRecognition);
+
+      function resultOfSpeechRecognition(event) {
+        const current = event.resultIndex;
+        const transcript = event.results[current][0].transcript;
+        console.log(transcript);
+
+        if (transcript.toLowerCase().trim() === "stop recording") {
+          recognition.stop();
+        } else if (!searchFormInput.value) {
+          searchFormInput.value = transcript;
+        } else {
+          if (transcript.toLowerCase().trim() === "go") {
+            searchForm.submit();
+          } else if (transcript.toLowerCase().trim() === "reset input") {
+            searchFormInput.value = "";
+          } else {
+            searchFormInput.value = transcript;
+          }
+        }
+        // searchFormInput.value = transcript;
+        // searchFormInput.focus();
+        // setTimeout(() => {
+        //   searchForm.submit();
+        // }, 500);
+      }
+
+
+
+      info.textContent = 'Voice Commands: "stop recording", "reset input", "go"';
+
+    } else {
+      console.log("Your Browser does not support speech Recognition");
+      info.textContent = "Your Browser does not support Speech Recognition";
+    }
+  </script>
+
+</body>
+
+</html>
